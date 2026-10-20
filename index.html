@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b4a">
+<title>Baggage Tracing Desk</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="loginView" class="login-shell">
+  <section class="login-card">
+    <div class="brand-mark">BT</div>
+    <p class="eyebrow">AIRPORT OPERATIONS</p>
+    <h1>Baggage Tracing Desk</h1>
+    <p class="muted">Sign in to manage tracing cases and follow up on baggage status.</p>
+    <form id="loginForm">
+      <label for="loginUser">Username</label>
+      <input id="loginUser" autocomplete="username" required value="staff">
+      <label for="loginPass">Password</label>
+      <input id="loginPass" type="password" autocomplete="current-password" required placeholder="Enter password">
+      <p id="loginError" class="error" role="alert"></p>
+      <button class="primary full" type="submit">Sign in</button>
+    </form>
+    <div class="demo-note"><strong>First-time demo login</strong><br>Username: <code>staff</code> · Password: <code>Airport123!</code><br><span>Change these in <code>app.js</code> before sharing the site.</span></div>
+    <p class="security-note">This is a browser-only demo login, not secure authentication. Do not store sensitive passenger information on a public GitHub Pages site.</p>
+  </section>
+</div>
+
+<div id="appView" class="app-shell hidden">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><div class="brand-mark small">BT</div><div><strong>Baggage Tracing</strong><small>Airport operations</small></div></div>
+    <nav id="mainNav">
+      <button class="nav-item active" data-page="dashboard"><span>▦</span> Dashboard</button>
+      <button class="nav-item" data-page="cases"><span>▤</span> Tracing cases</button>
+      <button class="nav-item" data-page="reports"><span>▥</span> Reports & export</button>
+      <button class="nav-item" data-page="backup"><span>⇅</span> Data backup</button>
+    </nav>
+    <div class="sidebar-bottom"><span class="status-dot"></span><span>Local browser storage</span></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><p class="eyebrow">OPERATIONS WORKSPACE</p><h2 id="pageTitle">Dashboard</h2></div><div class="user-area"><div class="avatar">S</div><div><strong id="signedInAs">Staff</strong><small>Airport staff</small></div><button id="logoutBtn" class="btn light">Log out</button></div></header>
+    <section id="dashboardPage" class="page">
+      <div class="welcome-row"><div><h3>Good day, team</h3><p class="muted">Here is the current baggage tracing overview.</p></div><button class="primary" data-action="new-case">＋ New tracing case</button></div>
+      <div class="stats-grid">
+        <article class="stat-card"><span class="stat-label">Total cases</span><strong id="statTotal">0</strong><span class="stat-foot">All registered cases</span></article>
+        <article class="stat-card"><span class="stat-label">Open cases</span><strong id="statOpen">0</strong><span class="stat-foot">Awaiting resolution</span></article>
+        <article class="stat-card"><span class="stat-label">Baggage located</span><strong id="statLocated">0</strong><span class="stat-foot">Located, not yet closed</span></article>
+        <article class="stat-card"><span class="stat-label">Delivered / closed</span><strong id="statClosed">0</strong><span class="stat-foot">Completed cases</span></article>
+      </div>
+      <div class="content-grid">
+        <section class="panel"><div class="panel-head"><div><h3>Recent tracing cases</h3><p class="muted">Latest updates across all cases</p></div><button class="text-btn" data-page="cases">View all →</button></div><div id="recentCases" class="table-wrap"></div></section>
+        <section class="panel status-panel"><div class="panel-head"><div><h3>Cases by status</h3><p class="muted">Current workload</p></div></div><div id="statusBreakdown"></div></section>
+      </div>
+      <div class="notice"><span class="notice-icon">i</span><div><strong>Storage reminder</strong><p>Records are saved only in this browser. Use Data backup regularly. Clearing browser data or switching devices can make records unavailable.</p></div></div>
+    </section>
+
+    <section id="casesPage" class="page hidden">
+      <div class="section-toolbar"><div><h3>Tracing cases</h3><p class="muted">Create, search, edit, and update baggage tracing records.</p></div><button class="primary" data-action="new-case">＋ New tracing case</button></div>
+      <div class="filter-bar"><div class="search-wrap"><span>⌕</span><input id="caseSearch" placeholder="Search case ref, tag, passenger, flight…"></div><select id="statusFilter"><option value="">All statuses</option><option>Reported</option><option>Tracing in Progress</option><option>Baggage Located</option><option>Forwarded</option><option>Delivered</option><option>Closed</option></select><input type="date" id="fromFilter" aria-label="From date"><input type="date" id="toFilter" aria-label="To date"><button id="clearFilters" class="btn light">Clear</button></div>
+      <div class="panel"><div id="caseTable" class="table-wrap"></div><div id="caseCount" class="table-footer"></div></div>
+    </section>
+
+    <section id="reportsPage" class="page hidden">
+      <div class="section-toolbar"><div><h3>Reports & export</h3><p class="muted">Review tracing performance and download records.</p></div><div class="button-row"><button id="exportCsvBtn" class="btn light">↓ Export CSV</button><button id="exportExcelBtn" class="primary">↓ Export Excel-compatible</button></div></div>
+      <div class="filter-bar"><label class="inline-label">From <input type="date" id="reportFrom"></label><label class="inline-label">To <input type="date" id="reportTo"></label><select id="reportStatus"><option value="">All statuses</option><option>Reported</option><option>Tracing in Progress</option><option>Baggage Located</option><option>Forwarded</option><option>Delivered</option><option>Closed</option></select><button id="applyReport" class="btn light">Apply filters</button><button id="resetReport" class="btn light">Reset</button></div>
+      <div class="stats-grid compact"><article class="stat-card"><span class="stat-label">Matching records</span><strong id="reportTotal">0</strong></article><article class="stat-card"><span class="stat-label">Open records</span><strong id="reportOpen">0</strong></article><article class="stat-card"><span class="stat-label">Located / forwarded</span><strong id="reportProgress">0</strong></article><article class="stat-card"><span class="stat-label">Delivered / closed</span><strong id="reportDone">0</strong></article></div>
+      <div class="panel"><div class="panel-head"><div><h3>Filtered case report</h3><p class="muted">Export includes case details and current status.</p></div></div><div id="reportTable" class="table-wrap"></div></div>
+    </section>
+
+    <section id="backupPage" class="page hidden">
+      <div class="section-toolbar"><div><h3>Data backup & restore</h3><p class="muted">Download a JSON backup or restore one previously saved.</p></div></div>
+      <div class="backup-grid"><section class="panel"><div class="backup-icon">↓</div><h3>Export backup</h3><p class="muted">Save all tracing cases and their history to a JSON file. Keep it somewhere secure.</p><button id="backupBtn" class="primary">Download backup</button></section><section class="panel"><div class="backup-icon">↑</div><h3>Restore backup</h3><p class="muted">Import a backup JSON file. You can merge records or replace current records.</p><input type="file" id="restoreFile" accept=".json,application/json"><div class="button-row restore-actions"><button id="mergeRestore" class="btn light" disabled>Merge records</button><button id="replaceRestore" class="danger" disabled>Replace all</button></div><p id="restoreMsg" class="muted"></p></section></div>
+      <div class="notice warning"><span class="notice-icon">!</span><div><strong>Important limitation</strong><p>LocalStorage is not a shared database and is not protected by the demo login. Anyone with access to the same browser profile may access its records. GitHub Pages serves static files only.</p></div></div>
+    </section>
+    <footer> Baggage Tracing Desk <span>·</span> Version 1.0 <span>·</span> LocalStorage edition</footer>
+  </main>
+</div>
+
+<div id="caseModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card"><div class="modal-head"><div><p class="eyebrow">CASE MANAGEMENT</p><h2 id="modalTitle">New tracing case</h2></div><button id="closeModal" class="icon-btn" aria-label="Close">×</button></div>
+    <form id="caseForm">
+      <input type="hidden" id="editingId">
+      <div class="form-grid">
+        <div><label for="caseRef">Tracing reference *</label><input id="caseRef" required placeholder="Auto-generated if blank"></div>
+        <div><label for="reportDate">Date reported *</label><input id="reportDate" type="date" required></div>
+        <div><label for="passengerName">Passenger name *</label><input id="passengerName" required placeholder="Full name"></div>
+        <div><label for="contactInfo">Contact information</label><input id="contactInfo" placeholder="Phone or email"></div>
+        <div><label for="baggageTag">Baggage tag number *</label><input id="baggageTag" required placeholder="e.g. 1234567890"></div>
+        <div><label for="flightNumber">Flight number</label><input id="flightNumber" placeholder="e.g. ET302"></div>
+        <div><label for="route">Route / last known location</label><input id="route" placeholder="e.g. ADD–NBO"></div>
+        <div><label for="baggageType">Baggage type</label><select id="baggageType"><option>Suitcase</option><option>Carry-on</option><option>Bag</option><option>Box</option><option>Other</option></select></div>
+        <div><label for="baggageColor">Color / identifying marks</label><input id="baggageColor" placeholder="e.g. black, red ribbon"></div>
+        <div><label for="currentStatus">Current status *</label><select id="currentStatus" required><option>Reported</option><option>Tracing in Progress</option><option>Baggage Located</option><option>Forwarded</option><option>Delivered</option><option>Closed</option></select></div>
+        <div class="full-span"><label for="description">Baggage description / contents (avoid sensitive details)</label><textarea id="description" rows="2" placeholder="Describe appearance and distinguishing features"></textarea></div>
+        <div class="full-span"><label for="caseNotes">Update note / remarks</label><textarea id="caseNotes" rows="2" placeholder="What has been checked or what happens next?"></textarea></div>
+      </div>
+      <div class="modal-actions"><button type="button" id="cancelModal" class="btn light">Cancel</button><button type="submit" class="primary">Save case</button></div>
+    </form>
+  </div>
+</div>
+
+<div id="detailModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="modal-card detail-card"><div class="modal-head"><div><p class="eyebrow">CASE DETAILS</p><h2 id="detailTitle">Tracing case</h2></div><button id="closeDetail" class="icon-btn" aria-label="Close">×</button></div><div id="detailContent"></div></div></div>
+<div id="toast" class="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>
