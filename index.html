@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baggage Tracing System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login View -->
+    <div id="login-view" class="view active">
+        <div class="login-container">
+            <h2>Baggage Tracing System</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <div id="login-error" class="error-message"></div>
+            
+            <!-- Updated Branding Section -->
+            <div class="demo-notice">
+                <p><strong>Ethiopian Airline / BJR team</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App View (Hidden by default until login) -->
+    <div id="app-view" class="view">
+        <header>
+            <h1>Baggage Tracing & Management</h1>
+            <button id="logout-btn" class="btn-secondary">Logout</button>
+        </header>
+        
+        <main>
+            <section class="search-section">
+                <h2>Search Baggage</h2>
+                <div class="search-bar">
+                    <input type="text" id="tag-search-input" placeholder="Enter Baggage Tag Number (e.g., ET123456)">
+                    <button id="search-btn" class="btn-primary">Search</button>
+                </div>
+            </section>
+
+            <section id="result-section" class="result-section hidden">
+                <h2>Baggage Details</h2>
+                <div id="baggage-details"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Updated Footer -->
+    <footer>
+        <p>&copy; 2026 Ethiopian airline. All rights reserved.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
